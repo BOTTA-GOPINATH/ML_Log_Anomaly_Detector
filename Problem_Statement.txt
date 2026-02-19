@@ -1,1 +1,61 @@
+Problem Statement:
+  Detect abnormal activities in the system/server logs using machine learning.
+
+---
+
+Instead of manually checking logs, We automatially analyze logs and detect unusual patterns, suspicious logs.
+this helps to reduce our manual efforts
+
+---
+Target Users:
+
+SOC Analysts,
+Security Engineers,
+DevOps Teams,
+Cloud Monitoring Teams.
+
+---
+Log type:
+
+Web server logs (Apache/Nginx)
+
+System logs (Linux auth logs)
+
+Windows Event logs
+
+
+---
+Anamoly detection:
+There are 3 types of anomalies:
+
+1. Point Anomaly
+
+Single log entry abnormal
+Example: 1 IP making 500 requests in 1 minute
+
+2. Contextual Anomaly
+
+Normal behavior but abnormal at specific time
+Example: Admin login at 3AM
+
+3. Collective Anomaly
+
+Group of logs together abnormal
+Example: Brute force attempts
+
+We detect these anomality behaviour in the logs.
+
+
+---
+
+Input:
+
+Raw log file (CSV / text)
+
+Output:
+
+Anomaly score
+Mark as Normal / Suspicious
+
+
 
