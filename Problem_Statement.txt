@@ -4,7 +4,7 @@ Problem Statement:
 ---
 
 Instead of manually checking logs, We automatially analyze logs and detect unusual patterns, suspicious logs.
-this helps to reduce our manual efforts
+this helps to reduce our manual efforts and display them in dashboard
 
 ---
 Target Users:
