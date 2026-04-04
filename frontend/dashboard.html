@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SOC Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container" style="width:90%;">
+
+  <h1 style="margin-bottom:20px;">SOC Dashboard</h1>
+
+  <!-- Summary -->
+  <div class="grid" id="summary"></div>
+
+  <!-- Chart -->
+  <canvas id="chart"></canvas>
+
+  <!-- Table -->
+  <div style="max-height:400px; overflow:auto; margin-top:20px;">
+    <table id="table"></table>
+  </div>
+
+  <button onclick="downloadFile()">Download CSV</button>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const result = JSON.parse(localStorage.getItem("result"));
+
+// ✅ FIRST check
+if (!result) {
+  alert("No data found. Please upload again.");
+  window.location.href = "index.html";
+
+}
+
+// ✅ THEN use it
+const data = result.data || [];
+const summary = result.summary || {
+  total_records: data.length,
+  total_anomalies: data.filter(d => d.anomaly_label === 1).length,
+  detection_rate: 0
+};
+
+summary.detection_rate =
+  summary.total_records > 0
+    ? summary.total_anomalies / summary.total_records
+    : 0;
+// Summary
+document.getElementById("summary").innerHTML = `
+  <div class="card card-small">Total: ${summary.total_records}</div>
+  <div class="card card-small">Anomalies: ${summary.total_anomalies}</div>
+  <div class="card card-small">Rate: ${summary.detection_rate.toFixed(2)}</div>
+`;
+
+// Table
+const table = document.getElementById("table");
+
+table.innerHTML = `
+<tr>
+  <th>Score</th>
+  <th>Anomaly</th>
+  <th>ISO</th>
+</tr>
+`;
+
+data.forEach(row => {
+  table.innerHTML += `
+    <tr style="color:${row.anomaly_label ? '#f87171' : '#34d399'}">
+      <td>${row.anomaly_score}</td>
+      <td>${row.anomaly_label}</td>
+      <td>${row.iso_label}</td>
+    </tr>
+  `;
+});
+
+// Chart
+const anomaly = summary.total_anomalies;
+const normal = summary.total_records - anomaly;
+
+new Chart(document.getElementById("chart"), {
+  type: "bar",
+  data: {
+    labels: ["Anomaly", "Normal"],
+    datasets: [{
+      label: "Count",
+      data: [anomaly, normal]
+    }]
+  }
+});
+
+// Download
+function downloadFile() {
+  window.open("http://localhost:5000/download");
+}
+ 
+</script>
+
+</body>
+</html>
